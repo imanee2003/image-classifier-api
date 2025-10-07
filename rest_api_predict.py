@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from werkzeug.datastructures import FileStorage
-from predict_resnet50 import predict
+from predict_resnet50 import predict  # Importe ton module (doit être dans le même dossier)
 import tempfile
 import os
 
@@ -51,5 +51,12 @@ class Image(Resource):
 
 api.add_resource(Image, '/image')
 
+# Route santé pour Render/AWS (optionnel, pour vérifier si l'app vit)
+@app.route('/health')
+def health():
+    return {'status': 'OK', 'message': 'API Image Classifier prête !'}, 200
+
 if __name__ == '__main__':
-    app.run(debug=True, host='localhost', port=5000)
+    # Adaptation pour Render : utilise PORT env var (set par Render), fallback 5000 local
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)  # host='0.0.0.0' pour cloud ; debug=False en prod
