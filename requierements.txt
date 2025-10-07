@@ -1,0 +1,6 @@
+flask
+flask-restful
+werkzeug
+tensorflow
+numpy
+pillow
